@@ -42,11 +42,27 @@
                 width: 60%;
             }
         }
+        .publication-card {
+            display: flex;
+            align-items: flex-start; /* 위쪽 정렬 */
+            justify-content: space-between;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .pub-text {
+            flex: 1; /* 왼쪽 영역이 자동으로 넓게 */
+            margin-right: 20px;
+        }
+        
         .toc-image {
-            width: 240px;           /* 이미지 크기 */
-            float: right;           /* 오른쪽 정렬 (왼쪽으로 두려면 left로 변경) */
-            margin: 0 0 8px 12px;   /* 텍스트와의 여백 */
-            border-radius: 8px;     /* 둥근 모서리 */
+            width: 200px;   /* ✅ 그림 크기 키움 */
+            height: auto;
+            border-radius: 8px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -71,13 +87,15 @@ I aim to bridge molecular- and cellular-level processes through multi-modal and 
 
       <section id="publications">
           <h2>Publications</h2>
-          <div class="publications-element">
+          <div class="publication-card">
+          <div class="pub-text">
               <p><strong> Riemannian Denoising Score Matching for Molecular Structure Optimization with Accurate Energy </strong></p>
               <p>Jeheon Woo*, <u>Seonghwan Kim*</u>, Woo Youn Kim<span>&#8224;</span></p>
               <p>Accepted in Principle, Nat. Comp. Sci., 2025</p>
               <p><a href="https://arxiv.org/abs/2411.19769">Paper</a>
           </div>
           <img src="/assets/TOC_RDSM.png" alt="TOC figure" class="toc-image">
+          </div>
           <p></p>
           
           <div class="publications-element">
