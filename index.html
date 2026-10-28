@@ -1,263 +1,636 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Seonghwan Kim</title>
+    <meta name="description" content="Seonghwan Kim — AI Researcher at HITS Inc. Machine learning for atomistic simulation and drug discovery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <script>
+        // 저장된 테마를 먼저 적용해서 깜빡임 방지
+        try {
+            const t = localStorage.getItem('theme');
+            if (t) document.documentElement.dataset.theme = t;
+        } catch (e) {}
+    </script>
     <style>
+        :root {
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --text: #18181b;
+            --muted: #52525b;
+            --subtle: #a1a1aa;
+            --border: #e4e4e7;
+            --accent: #4f46e5;
+            --accent-soft: #eef2ff;
+            --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+            --shadow-hover: 0 2px 4px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.08);
+            --img-bg: #ffffff;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0b0b0f;
+                --surface: #16161d;
+                --text: #f4f4f5;
+                --muted: #a1a1aa;
+                --subtle: #71717a;
+                --border: #27272f;
+                --accent: #818cf8;
+                --accent-soft: #1e1b4b;
+                --shadow: none;
+                --shadow-hover: 0 0 0 1px #3f3f46;
+                --img-bg: #f4f4f5;
+            }
+        }
+        :root[data-theme="dark"] {
+            --bg: #0b0b0f;
+            --surface: #16161d;
+            --text: #f4f4f5;
+            --muted: #a1a1aa;
+            --subtle: #71717a;
+            --border: #27272f;
+            --accent: #818cf8;
+            --accent-soft: #1e1b4b;
+            --shadow: none;
+            --shadow-hover: 0 0 0 1px #3f3f46;
+            --img-bg: #f4f4f5;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: Trebuchet MS, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f2f2f2;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 15.5px;
+            line-height: 1.65;
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.2s, color 0.2s;
         }
-        header {
-            background-color: #f2f2f2;
-            padding: 20px;
-            text-align: center;
-        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
         .container {
-            width: 60%;
-            margin: auto;
-            max-width: 800px;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
-        h1 {
-            color: #333;
+
+        /* ---------- Nav ---------- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: saturate(180%) blur(12px);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border);
         }
-        section {
-            padding: 20px;
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+        .nav-name { font-weight: 600; color: var(--text); }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: var(--muted); font-size: 14px; }
+        .nav-links a:hover { color: var(--text); text-decoration: none; }
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            cursor: pointer;
+            color: var(--muted);
+            display: grid;
+            place-items: center;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: var(--subtle); }
+        .theme-toggle svg { width: 16px; height: 16px; }
+        .icon-sun { display: none; }
+        :root[data-theme="dark"] .icon-sun { display: block; }
+        :root[data-theme="dark"] .icon-moon { display: none; }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) .icon-sun { display: block; }
+            :root:not([data-theme="light"]) .icon-moon { display: none; }
+        }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding: 64px 0 40px;
         }
         .profile-image {
+            width: 132px;
+            height: 132px;
             border-radius: 50%;
-            width: 150px;
-            height: 150px;
             object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid var(--surface);
+            box-shadow: 0 0 0 1px var(--border), var(--shadow);
         }
-        .publications-element p {
-            margin: 2px 0; /* Adjust the margin as per your preference */
+        .hero h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
-        .awards-element p {
-            margin: 2px 0; /* Adjust the margin as per your preference */
+        .hero .role {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 16px;
         }
-        @media only screen and (max-width: 800px) {
-            .container {
-                width: 92%;
-            }
+        .hero .tagline {
+            margin: 10px 0 0;
+            color: var(--muted);
+        }
+        .pill-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+        .pill-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text);
+            font-size: 13.5px;
+            background: var(--surface);
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .pill-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .pill-links svg { width: 14px; height: 14px; }
+
+        /* ---------- Sections ---------- */
+        section { padding: 28px 0; scroll-margin-top: 64px; }
+        h2 {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin: 0 0 18px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--subtle);
+        }
+        h2 .note {
+            font-size: 12.5px;
+            font-weight: 400;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+        #about p { margin: 0 0 14px; }
+
+        /* ---------- News ---------- */
+        .news { list-style: none; margin: 0; padding: 0; }
+        .news li {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 12px;
+            padding: 7px 0;
+        }
+        .news .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: var(--subtle);
+            padding-top: 2px;
+        }
+
+        /* ---------- Timeline (Experience / Education) ---------- */
+        .entry {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .entry:last-child { border-bottom: none; }
+        .entry .org { font-weight: 600; }
+        .entry .detail { color: var(--muted); font-size: 14.5px; }
+        .entry .when {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: var(--subtle);
+            white-space: nowrap;
+            padding-top: 3px;
+        }
+
+        /* ---------- Publications ---------- */
+        .pub-toggle {
+            display: inline-flex;
+            padding: 3px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+        }
+        .pub-toggle button {
+            border: none;
+            background: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font: inherit;
+            font-size: 12.5px;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--muted);
+            cursor: pointer;
+        }
+        .pub-toggle button.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
         }
         .publication-card {
             display: flex;
-            align-items: flex-start; /* 위쪽 정렬 */
-            justify-content: space-between;
-            margin-bottom: 24px;
-            background-color: #ffffff;
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            padding: 20px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            transition: transform 0.15s, box-shadow 0.15s;
         }
-        
-        .pub-text {
-            flex: 1; /* 왼쪽 영역이 자동으로 넓게 */
-            min-width: 0;
-            margin-right: 20px;
+        .publication-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
-        
+        #publications:not(.show-all) .publication-card:not([data-selected]) { display: none; }
+        .pub-text { flex: 1; min-width: 0; }
+        .venue {
+            display: inline-block;
+            margin-bottom: 8px;
+            padding: 2px 9px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 500;
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+        .pub-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .pub-authors {
+            margin: 6px 0 0;
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .pub-authors u {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+        }
+        .pub-ref {
+            margin: 2px 0 0;
+            font-size: 13.5px;
+            color: var(--subtle);
+            font-style: italic;
+        }
+        .pub-links { margin-top: 10px; display: flex; gap: 8px; }
+        .pub-links a {
+            padding: 3px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .pub-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+        }
         .toc-image {
-            width: auto;
-            height: auto;
-            max-height: 180px;
-            max-width: 45%; /* 창이 좁아지면 그림도 같이 줄어듦 */
-            border-radius: 8px;
+            width: 220px;
+            max-width: 38%;
+            height: 150px;
             object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: var(--img-bg);
+            padding: 6px;
         }
-        @media only screen and (max-width: 600px) {
+
+        /* ---------- Awards / Service ---------- */
+        .simple-list { list-style: none; margin: 0; padding: 0; }
+        .simple-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 8px 0;
+        }
+        .simple-list .when {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: var(--subtle);
+            white-space: nowrap;
+        }
+        .simple-list .detail { color: var(--muted); }
+
+        footer {
+            padding: 40px 0 56px;
+            color: var(--subtle);
+            font-size: 13px;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 640px) {
+            body { font-size: 15px; }
+            .nav-links a { display: none; }
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 18px;
+                padding: 40px 0 24px;
+            }
+            .hero h1 { font-size: 28px; }
+            .pill-links { justify-content: center; }
             .publication-card {
-                flex-direction: column; /* 좁은 화면: 그림을 텍스트 아래로 */
+                flex-direction: column-reverse;
+                align-items: stretch;
+                gap: 14px;
+                padding: 16px;
             }
-            .pub-text {
-                margin-right: 0;
-            }
-            .toc-image {
-                max-width: 100%;
-                max-height: 220px;
-                margin: 10px auto 0;
-            }
+            .toc-image { width: 100%; max-width: 100%; height: 180px; }
+            .entry { flex-direction: column; gap: 2px; }
+            .news li { grid-template-columns: 1fr; gap: 0; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="/Profile.jpg" alt="Profile Picture" class="profile-image">
-        <h1>Seonghwan Kim</h1>
-        <p>AI Researcher, HITS Inc.</p>
-        <p><a href="mailto:shkim@hits.ai">shkim@hits.ai</a>, <a href="mailto:dmdtka0084@gmail.com">dmdtka0084@gmail.com</a></p>
-        <p><a href="https://scholar.google.com/citations?user=qrUHQ90AAAAJ&hl">Scholar</a> | <a href="https://www.linkedin.com/in/seonghwan-kim-935a4625a/">Linkedin</a> | <a href="https://github.com/seonghann">Github</a> </p>
-    </header>
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-name">Seonghwan Kim</a>
+            <div class="nav-links">
+                <a href="#news">News</a>
+                <a href="#experience">Experience</a>
+                <a href="#publications">Publications</a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
-      <section id="about">
-          <h2>About Me</h2>
-          <p>Hi! I am an AI Researcher at HITS Inc., an AI-driven drug discovery company.
+        <header class="hero">
+            <img src="/Profile.jpg" alt="Seonghwan Kim" class="profile-image">
+            <div>
+                <h1>Seonghwan Kim</h1>
+                <p class="role">AI Researcher, HITS Inc.</p>
+                <p class="tagline">Machine learning for atomistic simulation &amp; drug discovery</p>
+                <div class="pill-links">
+                    <a href="mailto:shkim@hits.ai">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                        shkim@hits.ai</a>
+                    <a href="mailto:dmdtka0084@gmail.com">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                        dmdtka0084@gmail.com</a>
+                    <a href="https://scholar.google.com/citations?user=qrUHQ90AAAAJ&hl">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zm-6.18 9.72v4L12 21l6.18-4.28v-4L12 16.5l-6.18-3.78z"/></svg>
+                        Scholar</a>
+                    <a href="https://github.com/seonghann">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+                        GitHub</a>
+                    <a href="https://www.linkedin.com/in/seonghwan-kim-935a4625a/">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                        LinkedIn</a>
+                </div>
+            </div>
+        </header>
+
+        <section id="about">
+            <h2>About</h2>
+            <p>Hi! I am an AI Researcher at HITS Inc., an AI-driven drug discovery company.
 Before joining HITS, I was an AI-CRED Research Fellow at KAIST, working with Prof. Woo Youn Kim and Prof. Sungsoo Ahn.
 I received my Ph.D. in Chemistry from KAIST, where I worked in the Intelligent Chemistry Lab under the supervision of Prof. Woo Youn Kim.</p>
-          <p>My research focuses on developing machine learning methods grounded in physical and chemical principles to accelerate atomistic simulations.
+            <p>My research focuses on developing machine learning methods grounded in physical and chemical principles to accelerate atomistic simulations.
 I have built generative models for molecular structures using diffusion processes, flow matching, and Schr&ouml;dinger bridges&mdash;with a particular emphasis on navigating atomistic energy landscapes, including transition state prediction and molecular structure optimization with quantum-chemical accuracy.</p>
-          <p>Building on this foundation, I am expanding toward simulation-driven approaches for drug discovery, including molecular dynamics acceleration, free energy calculations, and enhanced sampling of rare events.
+            <p>Building on this foundation, I am expanding toward simulation-driven approaches for drug discovery, including molecular dynamics acceleration, free energy calculations, and enhanced sampling of rare events.
 My goal is to make previously intractable atomistic computations feasible by combining rigorous mathematical frameworks with scalable GPU-based infrastructure.</p>
-      </section>
+        </section>
 
-      <section id="experience">
-          <h2>Experience</h2>
-          <div class="education-element">
-              <p><strong>HITS Inc.</strong> <span style="float:right;">Oct. 2026 &ndash; Present</span></p>
-              <p>AI Researcher</p>
-          </div>
-          <div class="education-element">
-              <p><strong>Korea Advanced Institute of Science and Technology (KAIST)</strong> <span style="float:right;">Aug. 2025 &ndash; Oct. 2026</span></p>
-              <p>AI-CRED Research Fellow &nbsp;&nbsp; <em>with Prof. Woo Youn Kim and Prof. Sungsoo Ahn</em></p>
-          </div>
-      </section>
+        <section id="news">
+            <h2>News</h2>
+            <!-- 새 소식은 맨 위에 <li> 하나 추가 -->
+            <ul class="news">
+                <li><span class="date">2026.10</span><span>Joined <strong>HITS Inc.</strong> as an AI Researcher.</span></li>
+                <li><span class="date">2026</span><span>AdaPert accepted to <strong>ICML 2026</strong>.</span></li>
+                <li><span class="date">2026</span><span>Riemannian Denoising Model published in <strong>Nature Computational Science</strong>.</span></li>
+                <li><span class="date">2026</span><span>FragFM accepted to <strong>ICLR 2026</strong>.</span></li>
+                <li><span class="date">2025.08</span><span>Received Ph.D. in Chemistry from KAIST; started as AI-CRED Research Fellow.</span></li>
+            </ul>
+        </section>
 
-      <section id="education">
-          <h2>Education</h2>
-          <div class="education-element">
-              <p><strong>Korea Advanced Institute of Science and Technology (KAIST)</strong> <span style="float:right;">Sep. 2019 &ndash; Aug. 2025</span></p>
-              <p>Ph.D. in Chemistry &nbsp;&nbsp; <em>Advisor: Prof. Woo Youn Kim</em></p>
-          </div>
-          <div class="education-element">
-              <p><strong>Korea Advanced Institute of Science and Technology (KAIST)</strong> <span style="float:right;">Mar. 2013 &ndash; Feb. 2019</span></p>
-              <p>B.S. in Mathematics and Chemical &amp; Biomolecular Engineering (Double Major)</p>
-          </div>
-      </section>
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="entry">
+                <div>
+                    <div class="org">HITS Inc.</div>
+                    <div class="detail">AI Researcher</div>
+                </div>
+                <div class="when">Oct. 2026 &ndash; Present</div>
+            </div>
+            <div class="entry">
+                <div>
+                    <div class="org">Korea Advanced Institute of Science and Technology (KAIST)</div>
+                    <div class="detail">AI-CRED Research Fellow &middot; <em>with Prof. Woo Youn Kim and Prof. Sungsoo Ahn</em></div>
+                </div>
+                <div class="when">Aug. 2025 &ndash; Oct. 2026</div>
+            </div>
+        </section>
 
-      <section id="publications">
-          <h2>Publications</h2>
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong> Riemannian Denoising Model for Molecular Structure Optimization with Chemical Accuracy </strong></p>
-              <p><u>Seonghwan Kim*</u>, Jeheon Woo*, Jun Hyeong Kim, Woo Youn Kim<span>&#8224;</span></p>
-              <p>Nat. Comp. Sci. 6, 134&ndash;144, 2026</p>
-              <p><a href="https://www.nature.com/articles/s43588-025-00919-1">Paper</a></p>
-          </div>
-          <img src="/assets/TOC_RDSM.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+        <section id="education">
+            <h2>Education</h2>
+            <div class="entry">
+                <div>
+                    <div class="org">Korea Advanced Institute of Science and Technology (KAIST)</div>
+                    <div class="detail">Ph.D. in Chemistry &middot; <em>Advisor: Prof. Woo Youn Kim</em></div>
+                </div>
+                <div class="when">Sep. 2019 &ndash; Aug. 2025</div>
+            </div>
+            <div class="entry">
+                <div>
+                    <div class="org">Korea Advanced Institute of Science and Technology (KAIST)</div>
+                    <div class="detail">B.S. in Mathematics and Chemical &amp; Biomolecular Engineering (Double Major)</div>
+                </div>
+                <div class="when">Mar. 2013 &ndash; Feb. 2019</div>
+            </div>
+        </section>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching</strong></p>
-              <p><u>Seonghwan Kim*</u>, Joongwon Lee*, Seokhyun Moon*, Hyunwoo Kim, Woo Youn Kim<span>&#8224;</span></p>
-              <p>ICLR 2026</p>
-              <p><a href="https://openreview.net/forum?id=tr6vRn2aPg">Paper</a></p>
-          </div>
-          <img src="/assets/TOC_FragFM.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+        <section id="publications">
+            <h2>
+                <span>Publications <span class="note">&nbsp;* equal contribution &middot; &dagger; corresponding</span></span>
+                <span class="pub-toggle" role="group" aria-label="Publication filter">
+                    <button type="button" class="active" data-filter="selected">Selected</button>
+                    <button type="button" data-filter="all">All</button>
+                </span>
+            </h2>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Diffusion-based generative AI for exploring transition states from 2D molecular graphs</strong></p>
-              <p><u>Seonghwan Kim*</u>, Jeheon Woo*, Woo Youn Kim<span>&#8224;</span></p>
-              <p>Nat. Commun. 15, 341, 2024</p>
-              <p><a href="https://www.nature.com/articles/s41467-023-44629-6">Paper</a> | <a href="https://github.com/seonghann/tsdiff">Code</a></p>
-          </div>
-          <img src="/assets/TOC_TSDiff.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+            <!-- data-selected 가 붙은 카드만 "Selected" 탭에 노출 -->
+            <div class="publication-card" data-selected>
+                <div class="pub-text">
+                    <span class="venue">Nat. Comput. Sci. 2026</span>
+                    <p class="pub-title">Riemannian Denoising Model for Molecular Structure Optimization with Chemical Accuracy</p>
+                    <p class="pub-authors"><u>Seonghwan Kim*</u>, Jeheon Woo*, Jun Hyeong Kim, Woo Youn Kim&dagger;</p>
+                    <p class="pub-ref">Nat. Comp. Sci. 6, 134&ndash;144, 2026</p>
+                    <div class="pub-links"><a href="https://www.nature.com/articles/s43588-025-00919-1">Paper</a></div>
+                </div>
+                <img src="/assets/TOC_RDSM.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Discrete Diffusion Schr&ouml;dinger Bridge Matching for Graph Transformation</strong></p>
-              <p>Jun Hyeong Kim*, <u>Seonghwan Kim*</u>, Seokhyun Moon*, Hyeongwoo Kim*, Jeheon Woo*, Woo Youn Kim<span>&#8224;</span></p>
-              <p>ICLR 2025</p>
-              <p><a href="https://openreview.net/forum?id=tQyh0gnfqW">Paper</a></p>
-          </div>
-          <img src="/assets/TOC_DDSBM.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+            <div class="publication-card">
+                <div class="pub-text">
+                    <span class="venue">ICML 2026</span>
+                    <p class="pub-title">Learning Adaptive Perturbation-Conditioned Contexts for Robust Transcriptional Response Prediction</p>
+                    <p class="pub-authors">Yinhua Piao, Hyomin Kim, <u>Seonghwan Kim</u>, Yunhak Oh, Junhyeok Jeon, Sang-Yeon Hwang, Jaechang Lim, Woo Youn Kim, Chanyoung Park, Sungsoo Ahn&dagger;</p>
+                </div>
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Collective Variable Free Transition Path Sampling with Generative Flow Network</strong></p>
-              <p>Kiyoung Seong*, Seonghyun Park*, <u>Seonghwan Kim</u>, Woo Youn Kim, Sungsoo Ahn<span>&#8224;</span></p>
-              <p>ICLR 2025</p>
-              <p><a href="https://openreview.net/forum?id=iRAhN14kZs&referrer=%5Bthe%20profile%20of%20Sungsoo%20Ahn%5D(%2Fprofile%3Fid%3D~Sungsoo_Ahn1)">Paper</a></p>
-          </div>
-          </div>
-          <p></p>
+            <div class="publication-card" data-selected>
+                <div class="pub-text">
+                    <span class="venue">ICLR 2026</span>
+                    <p class="pub-title">FragFM: Hierarchical Framework for Efficient Molecule Generation via Fragment-Level Discrete Flow Matching</p>
+                    <p class="pub-authors"><u>Seonghwan Kim*</u>, Joongwon Lee*, Seokhyun Moon*, Hyunwoo Kim, Woo Youn Kim&dagger;</p>
+                    <div class="pub-links"><a href="https://openreview.net/forum?id=tr6vRn2aPg">Paper</a></div>
+                </div>
+                <img src="/assets/TOC_FragFM.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Dynamic Precision Approach for Accelerating Large-Scale Eigenvalue Solvers in Electronic Structure Calculations on Graphics Processing Units</strong></p>
-              <p>Jeheon Woo*, <u>Seonghwan Kim*</u>, Woo Youn Kim<span>&#8224;</span></p>
-              <p>J. Chem. Theory Comput. 2023, 19, 5, 1457&ndash;1465</p>
-              <p><a href="https://pubs.acs.org/doi/abs/10.1021/acs.jctc.2c00983">Paper</a> | <a href="https://gitlab.com/jhwoo15/gospel">Code</a></p>
-          </div>
-          <img src="/assets/TOC_DynLOBPCG.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+            <div class="publication-card" data-selected>
+                <div class="pub-text">
+                    <span class="venue">ICLR 2025</span>
+                    <p class="pub-title">Discrete Diffusion Schr&ouml;dinger Bridge Matching for Graph Transformation</p>
+                    <p class="pub-authors">Jun Hyeong Kim*, <u>Seonghwan Kim*</u>, Seokhyun Moon*, Hyeongwoo Kim*, Jeheon Woo*, Woo Youn Kim&dagger;</p>
+                    <div class="pub-links"><a href="https://openreview.net/forum?id=tQyh0gnfqW">Paper</a></div>
+                </div>
+                <img src="/assets/TOC_DDSBM.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Gaussian-Approximated Poisson Preconditioner for Iterative Diagonalization in Real-Space Density Functional Theory</strong></p>
-              <p>Jeheon Woo*, <u>Seonghwan Kim*</u>, Woo Youn Kim<span>&#8224;</span></p>
-              <p>J. Phys. Chem. A 2023, 127, 17, 3883&ndash;3893</p>
-              <p><a href="https://pubs.acs.org/doi/abs/10.1021/acs.jpca.2c09111">Paper</a> | <a href="https://gitlab.com/jhwoo15/gospel">Code</a></p>
-          </div>
-          </div>
-          <p></p>
+            <div class="publication-card">
+                <div class="pub-text">
+                    <span class="venue">ICLR 2025</span>
+                    <p class="pub-title">Collective Variable Free Transition Path Sampling with Generative Flow Network</p>
+                    <p class="pub-authors">Kiyoung Seong*, Seonghyun Park*, <u>Seonghwan Kim</u>, Woo Youn Kim, Sungsoo Ahn&dagger;</p>
+                    <div class="pub-links"><a href="https://openreview.net/forum?id=iRAhN14kZs&referrer=%5Bthe%20profile%20of%20Sungsoo%20Ahn%5D(%2Fprofile%3Fid%3D~Sungsoo_Ahn1)">Paper</a></div>
+                </div>
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>Learning Adaptive Perturbation-Conditioned Contexts for Robust Transcriptional Response Prediction</strong></p>
-              <p>Yinhua Piao, Hyomin Kim, <u>Seonghwan Kim</u>, Yunhak Oh, Junhyeok Jeon, Sang-Yeon Hwang, Jaechang Lim, Woo Youn Kim, Chanyoung Park, Sungsoo Ahn<span>&#8224;</span></p>
-              <p>ICML 2026</p>
-          </div>
-          </div>
-          <p></p>
+            <div class="publication-card">
+                <div class="pub-text">
+                    <span class="venue">NeurIPS 2025 AI4D3</span>
+                    <p class="pub-title">MoAgent: A Hypothesis-Driven Multi-Agent Framework for Drug Mechanism of Action Discovery</p>
+                    <p class="pub-authors">Jun Hyeong Kim, Seokhyun Moon, <u>Seonghwan Kim*</u>, Junhyeok Jeon, Taein Kim, Jisu Seo, Songmi Kim, Woo Youn Kim&dagger;</p>
+                    <div class="pub-links"><a href="https://openreview.net/forum?id=XY9yFyi4GF">Paper</a></div>
+                </div>
+                <img src="/assets/TOC_MoAgent.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong> MoAgent: A Hypothesis-Driven Multi-Agent Framework for Drug Mechanism of Action Discovery </strong></p>
-              <p>Jun Hyeong Kim, Seokhyun Moon, <u>Seonghwan Kim*</u>, Junhyeok Jeon, Taein Kim, Jisu Seo, Songmi Kim, Woo Youn Kim<span>&#8224;</span></p>
-              <p>NeurIPS 2025 AI4D3</p>
-              <p><a href="https://openreview.net/forum?id=XY9yFyi4GF">Paper</a></p>
-          </div>
-          <img src="/assets/TOC_MoAgent.png" alt="TOC figure" class="toc-image">
-          </div>
-          <p></p>
+            <div class="publication-card" data-selected>
+                <div class="pub-text">
+                    <span class="venue">NeurIPS 2024</span>
+                    <p class="pub-title">GeoTMI: Predicting Quantum Chemical Property with Easy-to-Obtain Geometry via Positional Denoising</p>
+                    <p class="pub-authors">Hyeonsu Kim*, Jeheon Woo*, <u>Seonghwan Kim*</u>, Seokhyun Moon*, Jun Hyeong Kim*, Woo Youn Kim&dagger;</p>
+                    <div class="pub-links"><a href="https://openreview.net/forum?id=5JcKKRX2iH">Paper</a><a href="https://github.com/Imfinethankyou1/GeoTMI">Code</a></div>
+                </div>
+                <img src="/assets/TOC_GeoTMI.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-          <div class="publication-card">
-          <div class="pub-text">
-              <p><strong>GeoTMI: Predicting Quantum Chemical Property with Easy-to-Obtain Geometry via Positional Denoising</strong></p>
-              <p>Hyeonsu Kim*, Jeheon Woo*, <u>Seonghwan Kim*</u>, Seokhyun Moon*, Jun Hyeong Kim*, Woo Youn Kim<span>&#8224;</span></p>
-              <p>NeurIPS 2024</p>
-              <p><a href="https://openreview.net/forum?id=5JcKKRX2iH">Paper</a> | <a href="https://github.com/Imfinethankyou1/GeoTMI">Code</a></p>
-          </div>
-          <img src="/assets/TOC_GeoTMI.png" alt="TOC figure" class="toc-image">
-          </div>
-      </section>
+            <div class="publication-card" data-selected>
+                <div class="pub-text">
+                    <span class="venue">Nat. Commun. 2024</span>
+                    <p class="pub-title">Diffusion-based generative AI for exploring transition states from 2D molecular graphs</p>
+                    <p class="pub-authors"><u>Seonghwan Kim*</u>, Jeheon Woo*, Woo Youn Kim&dagger;</p>
+                    <p class="pub-ref">Nat. Commun. 15, 341, 2024</p>
+                    <div class="pub-links"><a href="https://www.nature.com/articles/s41467-023-44629-6">Paper</a><a href="https://github.com/seonghann/tsdiff">Code</a></div>
+                </div>
+                <img src="/assets/TOC_TSDiff.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-      <section id="awards">
-          <h2>Awards</h2>
-          <div class="awards-element">
-              <p><strong>Grand Prize</strong>, Samsung Electronics DS Division Industry-Academia Cooperation <span style="float:right;">2024</span></p>
-          </div>
-          <div class="awards-element">
-              <p><strong>2nd Place</strong>, Samsung AI Challenge <span style="float:right;">2023</span></p>
-          </div>
-          <div class="awards-element">
-              <p><strong>Recipient</strong>, 9th EDISON Computational Chemistry Software Competition <span style="float:right;">2019</span></p>
-          </div>
-      </section>
+            <div class="publication-card">
+                <div class="pub-text">
+                    <span class="venue">JCTC 2023</span>
+                    <p class="pub-title">Dynamic Precision Approach for Accelerating Large-Scale Eigenvalue Solvers in Electronic Structure Calculations on Graphics Processing Units</p>
+                    <p class="pub-authors">Jeheon Woo*, <u>Seonghwan Kim*</u>, Woo Youn Kim&dagger;</p>
+                    <p class="pub-ref">J. Chem. Theory Comput. 2023, 19, 5, 1457&ndash;1465</p>
+                    <div class="pub-links"><a href="https://pubs.acs.org/doi/abs/10.1021/acs.jctc.2c00983">Paper</a><a href="https://gitlab.com/jhwoo15/gospel">Code</a></div>
+                </div>
+                <img src="/assets/TOC_DynLOBPCG.png" alt="TOC figure" class="toc-image" loading="lazy">
+            </div>
 
-      <section id="service">
-          <h2>Academic Service</h2>
-          <p><strong>Journal Reviewer</strong> &nbsp; Nat. Comput. Sci. (2025), PNAS (2024), Nat. Mach. Intell. (2024), IEEE (2025)</p>
-          <p><strong>Conference Reviewer</strong> &nbsp; NeurIPS (2024, 2025), ICLR (2025, 2026)</p>
-      </section>
+            <div class="publication-card">
+                <div class="pub-text">
+                    <span class="venue">J. Phys. Chem. A 2023</span>
+                    <p class="pub-title">Gaussian-Approximated Poisson Preconditioner for Iterative Diagonalization in Real-Space Density Functional Theory</p>
+                    <p class="pub-authors">Jeheon Woo*, <u>Seonghwan Kim*</u>, Woo Youn Kim&dagger;</p>
+                    <p class="pub-ref">J. Phys. Chem. A 2023, 127, 17, 3883&ndash;3893</p>
+                    <div class="pub-links"><a href="https://pubs.acs.org/doi/abs/10.1021/acs.jpca.2c09111">Paper</a><a href="https://gitlab.com/jhwoo15/gospel">Code</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="awards">
+            <h2>Awards</h2>
+            <ul class="simple-list">
+                <li><span><strong>Grand Prize</strong>, <span class="detail">Samsung Electronics DS Division Industry-Academia Cooperation</span></span><span class="when">2024</span></li>
+                <li><span><strong>2nd Place</strong>, <span class="detail">Samsung AI Challenge</span></span><span class="when">2023</span></li>
+                <li><span><strong>Recipient</strong>, <span class="detail">9th EDISON Computational Chemistry Software Competition</span></span><span class="when">2019</span></li>
+            </ul>
+        </section>
+
+        <section id="service">
+            <h2>Academic Service</h2>
+            <ul class="simple-list">
+                <li><span><strong>Journal Reviewer</strong> &nbsp;<span class="detail">Nat. Comput. Sci. (2025), PNAS (2024), Nat. Mach. Intell. (2024), IEEE (2025)</span></span></li>
+                <li><span><strong>Conference Reviewer</strong> &nbsp;<span class="detail">NeurIPS (2024, 2025), ICLR (2025, 2026)</span></span></li>
+            </ul>
+        </section>
+
+        <footer>&copy; 2026 Seonghwan Kim</footer>
     </div>
 
-    <footer>
-    </footer>
+    <script>
+        // 다크모드 토글: OS 설정이 기본, 버튼으로 바꾸면 기억
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const root = document.documentElement;
+            const isDark = root.dataset.theme
+                ? root.dataset.theme === 'dark'
+                : matchMedia('(prefers-color-scheme: dark)').matches;
+            root.dataset.theme = isDark ? 'light' : 'dark';
+            try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+        });
+
+        // Selected / All 논문 토글
+        const pubs = document.getElementById('publications');
+        pubs.querySelectorAll('.pub-toggle button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                pubs.querySelectorAll('.pub-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+                pubs.classList.toggle('show-all', btn.dataset.filter === 'all');
+            });
+        });
+    </script>
 </body>
 </html>
